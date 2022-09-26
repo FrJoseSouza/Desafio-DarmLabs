@@ -1,7 +1,7 @@
 // SUMULAÇÃO DE BANCO - DARM LAB'S
-// OBS: Programa Feito em 3 dias, pois o email estava em spam então não recebi o link do projeto no começo
-// OBS2: Programa não funciona muito bem em compilers online (avisando só caso ele seja testado em um)
-// OBS3: Está bem desorganizado por enquanto
+// Obs1: Programa Feito em 3 dias, pois o email estava em spam então não recebi o link do projeto no começo
+// Obs2: Programa não funciona muito bem em compiladores de site (avisando caso ele seja testado em um)
+// Obs3: Programa testado apenas em Linux
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -11,9 +11,9 @@ typedef struct {
 	char nome [60+1];
 	char numero [19+1];
 	char cvc [3+1];
-	int validade;
-	int tipo_cartao;
-	int bandeira;	
+	char valid [6+1];	
+	char tipo_cartao [17+1];
+	char bandeira [16+1];
 } cartao;
 
 typedef struct {
@@ -21,32 +21,28 @@ typedef struct {
     char email [40+1];
     char cpf [11+1];
     char telefone [11+1];
-    char senha [6+1][2];
-    int tipo_conta;
+    char senha [6+1];
+    char tipo_conta [8+1];
 } cadastro;
-
-int limpa () { // FUNÇÃO PARA LIMPAR O CONSOLE EM QUALQUER SO
-    puts("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    return 0;
-}
 
 int main() {
     int opcao;
-    int contas = 0;
-    int cartoes = 0;
-    cadastro cadastros [5];
+    int qtd_contas = 0;
+    int qtd_cartoes = 0;
+    cadastro cadastros [50];
+    cartao cartoes [6];
     
-    strcpy (cadastros [0].nome, "teste teste");
+    // Cadastro [0] preenchido para testes //
+    strcpy (cadastros [0].nome, "teste");
     strcpy (cadastros [0].email, "teste@gmail.com");
     strcpy (cadastros [0].cpf, "12312312345");
     strcpy (cadastros [0].telefone, "85912341234");
-    strcpy (cadastros [0].senha [0], "123456");
-    strcpy (cadastros [0].senha [1], "123456");
-    cadastros [0].tipo_conta = 1;
+    strcpy (cadastros [0].senha, "123456");
+    strcpy (cadastros [0].tipo_conta, "Corrente");
     
-    //contas = 2;
+    //qtd_contas = 2;
     
-    while (opcao != 4) {
+    while (opcao != 4) { // MENU PRINCIPAL //
     	system ("clear");
     	//usleep (500*1000);
     	printf ("[ BANCO - DARM LAB'S ]\n\n");
@@ -60,12 +56,16 @@ int main() {
         		char scan_nome [60+1];
 				char scan_numero [19+1];
 				char scan_cvc [3+1];
-				int scan_validade;
+				int scan_valid;
 				int scan_tipo_cartao;
 				int scan_bandeira;
+				char valids [4][6+1] = {"2 anos", "4 anos", "5 anos", "6 anos"};
+				char tipos_cartao [5][17+1] = {"Crédito", "Débito", "Poupança", "Crédito e débito", "Poupança e débito"};
+				char bandeiras [5][16+1] = {"Visa", "MasterCard", "Elo", "HiberCard", "American Express"};
+				
 				
         		while (opcao != 0) {                    
-                    if (cartoes > 5) {                                                                        
+                    if (qtd_cartoes > 5) {                                                                        
                         printf ("Você só pode cadastrar até 6 cartões");
                         //usleep (500*1000);
                         
@@ -73,11 +73,11 @@ int main() {
                     	//scanf ("%d", &opcao);
                     	getchar ();
                     	
-                        limpa ();
+                    	system ("clear");
                         break;
                     }                                       
                     printf ("|Nome completo \n|");
-                    scanf ("%60s", scan_nome);
+                    scanf ("%60[^\n]s", scan_nome);
                     setbuf (stdin, NULL);
                     
                     printf ("\n|Número da conta (Digite sem espaços) \n|");
@@ -89,7 +89,7 @@ int main() {
                     setbuf (stdin, NULL);  
                     
                     printf ("\n|Validade (Escolha uma das opções) \n|[1] 2 anos \n|[2] 4 anos \n|[3] 5 anos \n|[4] 6 anos \n|");
-                    scanf ("%d", &scan_validade);
+                    scanf ("%d", &scan_valid);
                     setbuf (stdin, NULL);
                     
                     printf ("\n|Tipo do cartão (Escolha uma das opções) \n|[1] Crédito \n|[2] Débito \n|[3] Poupança \n|[4] Crédito e débito \n|[5] Poupança e débito \n|");
@@ -100,27 +100,32 @@ int main() {
                     scanf ("%d", &scan_bandeira);                    
                     setbuf (stdin, NULL);
                     
-                    printf ("\n%s \n%s \n%s \n%d \n%d \n%d \n", scan_nome, scan_numero, scan_cvc, scan_validade, scan_tipo_cartao, scan_bandeira);
+                    //printf ("\n%s \n%s \n%s \n%d \n%d \n%d \n", scan_nome, scan_numero, scan_cvc, scan_valid, scan_tipo_cartao, scan_bandeira);                    
+                    system ("clear");
+                    strcpy (cartoes [qtd_cartoes].nome, scan_nome);
+                    strcpy (cartoes [qtd_cartoes].numero, scan_numero);
+                    strcpy (cartoes [qtd_cartoes].cvc, scan_cvc);
+                    strcpy (cartoes [qtd_cartoes].valid, valids [scan_valid-1]);
+                    strcpy (cartoes [qtd_cartoes].tipo_cartao, tipos_cartao [scan_tipo_cartao-1]);
+                    strcpy (cartoes [qtd_cartoes].bandeira, bandeiras [scan_bandeira-1]);
+                                        
+                    printf ("\nCartão n°%d \n", qtd_cartoes);
+                    printf (" Nome: %s \n Número: %s \n CVC: %s \n Valid: %s \n Tipo: %s \n Bandeira: %s \n", cartoes [qtd_cartoes].nome, cartoes [qtd_cartoes].valid, cartoes [qtd_cartoes].cvc, cartoes [qtd_cartoes].valid, cartoes [qtd_cartoes].tipo_cartao, cartoes [qtd_cartoes].bandeira);
                     
-                    /*
-                    strcpy (pizzas[cont].nome, scanNome);
-                    pizzas[cont].preco = scanPreco;
+                    qtd_cartoes++; // Aumenta até 6 //
                     
-                    cont++;
-                    printf ("\n conts: %d", cont);
-                    // printf ("Tipo: %s \nPreço: %.2f", pizzas[cont].nome, pizzas[cont].preco);
-                    */
-                    printf ("\n |Digite 0 para voltar \n |Ou outro valor para criar outro cartão \n |");
+                    printf ("\n| Digite 0 para voltar \n| Ou outro valor para criar outro cartão \n| ");
                     scanf ("%d", &opcao);
                     
-                    if (opcao != 0) {
+                    if (opcao != 0) {	    				
 	    				system ("clear");
 	    				//usleep (500*1000);
 	    			}
-            	} // WHILE
+            	}// WHILE //
                 break;
-            } // CASE
-        } // SWITCH
-    } // WHILE
+            }// CASE //
+        }// SWITCH //
+    }// WHILE //
+    
     return 0;
 }
